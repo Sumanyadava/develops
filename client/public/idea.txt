@@ -1,0 +1,17 @@
+login signup section 
+
+user Registration 
+user login 
+user sign out 
+
+Sign up - email password username 
+
+no / routing home
+
+authentication 
+
+http is stateless
+
+Delete user admin 
+create admin 
+session token 

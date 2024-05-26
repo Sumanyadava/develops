@@ -1,0 +1,53 @@
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Home from "./pages/Home";
+import EmployeeAttendance from "./pages/emloyee/EmployeeAttendance";
+import AdminHome from "./pages/AdminHome";
+import ErrorPage from "./pages/ErrorPage";
+import EmployeeList from "./pages/EmployeeList";
+import Header from "./components/Header";
+
+function App() {
+  const [role, setRole] = useState(1);
+  const [user,setUser] = useState({})
+
+  return (
+    <div className="h-screen w-screen ">
+      <BrowserRouter>
+      <Header role={role} setRole={setRole} />
+        <Routes>
+          <Route path="/signin" element={<Signup role={role} />} />
+
+          <Route
+            path="/login"
+            element={<Login role={role} setRole={setRole} />}
+          />
+
+          <Route path="/dashboard" element={ role == 3 ? (<AdminHome role={role} />) : (<Home role={role} />)} />
+
+          <Route
+            path="/attendance"
+            element={<EmployeeAttendance role={role} />}
+          />
+
+          <Route
+            path="/attendancereport"
+            element={<EmployeeList role={role} />}
+          />
+
+          {/* <Route path="/admin" element={<AdminHome role={role} />} /> */}
+
+          <Route path="*" element={<ErrorPage />} />
+
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+//todo: how can i use react router as header and element
+
+export default App;
