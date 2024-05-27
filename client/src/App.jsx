@@ -11,7 +11,7 @@ import EmployeeList from "./pages/EmployeeList";
 import Header from "./components/Header";
 
 function App() {
-  const [role, setRole] = useState(1);
+  const [role, setRole] = useState(3);
   const [user,setUser] = useState({})
 
   return (

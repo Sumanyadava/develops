@@ -23,7 +23,7 @@ const login = async (req, res) => {
         res.status(400).json({ error: "password is incorrect" });
       console.log(validPassword);
     } else {
-      return res.status(200).json({ message: "success full" });
+      return res.status(200).json({ message: "Login success full" });
 
     //   const token = jwt.sign({username : user.username}, process.env.JWT_KEY, {expiresIn: '2d'})
 
@@ -34,8 +34,9 @@ const login = async (req, res) => {
   }
 };
 
+
 const signin = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, useRole, workingHours, } = req.body;
 
   try {
     const exsistUSer = await User.findOne({ email: email });
@@ -50,6 +51,8 @@ const signin = async (req, res) => {
         username: name,
         email: email,
         password: hash_password,
+        userRole:useRole,
+        workingHours:workingHours
       });
 
       await newUser.save();
@@ -57,7 +60,7 @@ const signin = async (req, res) => {
     }
 
   } catch (error) {
-    return res.status(500).json({ error: "an error occured" });
+    return res.status(500).json({ error: "an error occured",error });
   }
 };
 

@@ -5,14 +5,15 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
-const Signup = ({role}) => {
+const Signup = ({ role }) => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [userRole, setUserRole] = useState(1);
   const [eye, setEye] = useState("password");
   const [passVal, setpassVal] = useState("text-red-300");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleShow = () => {
     if (eye === "password") {
       setEye("text");
@@ -42,125 +43,137 @@ const Signup = ({role}) => {
     ) {
       toast.error("Please fill all the fields");
     } else {
-      axios
-        .post("http://localhost:3002/api/auth/signin", {
-          name: userName,
-          email: userEmail,
-          password: userPassword,
-        })
-        .then((data) => {
-          toast.success("Signup Success");
-          console.log(userName, userEmail, userPassword);
-          setUserName("");
-          setUserEmail("");
-          setUserPassword("");
-          navigate("/");
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("user already exsist")
-        });
+      // axios
+      //   .post("http://localhost:3002/api/auth/signin", {
+      //     name: userName,
+      //     email: userEmail,
+      //     password: userPassword,
+      //   })
+      //   .then((data) => {
+      //     toast.success("Signup Success");
+      //     console.log(userName, userEmail, userPassword);
+      //     setUserName("");
+      //     setUserEmail("");
+      //     setUserPassword("");
+      //     navigate("/");
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     toast.error("user already exsist");
+      //   });
+
+          console.log(userName, userEmail, userPassword,userRole);
     }
   };
 
   return (
     <>
-    
-    <div className="flex h-full w-full text-black">
-      
-      <div className="signup_message bg-base-300 w-full sm:w-[50%] flex items-center justify-center">
-        <div className="signup_container bg-base-100 h-[600px] w-[400px] rounded-md">
-          <form
-            action=""
-            className="w-full h-full flex flex-col p-5"
-            onSubmit={handleSubmit}
-          >
-            {/* <button
-              className="btn border-black text-black hover:bg-gray-100 bg-inherit"
-              onClick={() => {
-                toast.error("not integrated");
-              }}
+      <div className="flex h-full w-full text-black">
+        <div className="signup_message bg-base-300 w-full sm:w-[50%] flex items-center justify-center">
+          <div className="signup_container bg-base-100 h-[600px] w-[400px] rounded-md">
+            <form
+              action=""
+              className="w-full h-full flex flex-col p-5"
+              onSubmit={handleSubmit}
             >
-              Signup with Google{" "}
-            </button>
+              <label className="form-control w-full ">
+                <div className="label">
+                  <span className="">Employee name</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Name here"
+                  required
+                  className="input input-bordered w-full bg-white "
+                  value={userName}
+                  onChange={(e) => {
+                    setUserName(e.target.value);
+                  }}
+                />
+              </label>
 
-            <div className="divider divider-neutral">or</div> */}
-            {/* text field  */}
+              <label className="form-control w-full mt-2">
+                <div className="label">
+                  <span className="">Employee email </span>
+                </div>
+                <input
+                  type="email"
+                  placeholder="Email here"
+                  className="input input-bordered w-full  bg-white"
+                  required
+                  value={userEmail}
+                  onChange={(e) => {
+                    setUserEmail(e.target.value);
+                  }}
+                />
+              </label>
 
-            <label className="form-control w-full ">
-              <div className="label">
-                <span className="">What is your name?</span>
-              </div>
-              <input
-                type="text"
-                placeholder="Name here"
-                required
-                className="input input-bordered w-full bg-white "
-                value={userName}
-                onChange={(e) => {
-                  setUserName(e.target.value);
-                }}
-              />
-            </label>
+              <label className="form-control w-full mt-2">
+                <div className="label">
+                  <span className="">Employee role </span>
+                </div>
+                <select
+                  name="userRegister"
+                  id="userRegister"
+                  value={userRole}
+                  onChange={(e) => {
+                    console.log(userRole);
+                    setUserRole(e.target.value);
+                  }}
+                  className="input input-bordered w-full  bg-white"
+                >
+                  <option value="1">Employee</option>
+                  <option value="2">Hr</option>
+                  <option value="3">Admin</option>
+                </select>
+              </label>
 
-            <label className="form-control w-full mt-2">
-              <div className="label">
-                <span className="">Write your email</span>
-              </div>
-              <input
-                type="email"
-                placeholder="Email here"
-                className="peer input input-bordered w-full  bg-white"
-                required
-                value={userEmail}
-                onChange={(e) => {
-                  setUserEmail(e.target.value);
-                }}
-              />
-            </label>
+              <label className="form-control w-full mt-2 relative">
+                <div className="label">
+                  <span className="">Write a password</span>
+                  <span
+                    className="label-text-alt cursor-pointer"
+                    onClick={handleShow}
+                  >
+                    eye
+                  </span>
+                </div>
+                <input
+                  type={eye}
+                  placeholder="Type here"
+                  required
+                  className="peer input input-bordered w-full bg-white "
+                  value={userPassword}
+                  onChange={handlePass}
+                />
 
-            <label className="form-control w-full mt-2 relative">
-              <div className="label">
-                <span className="">Write a password</span>
-                <span className="label-text-alt cursor-pointer" onClick={handleShow}>
-                  eye
+                <span
+                  className={`invisible peer-focus:visible pl-2 pt-2 label-text-alt  ${passVal}`}
+                >
+                  password must be 8 character long
                 </span>
-              </div>
-              <input
-                type={eye}
-                placeholder="Type here"
-                required
-                className="peer input input-bordered w-full bg-white "
-                value={userPassword}
-                onChange={handlePass}
-              />
+              </label>
 
-              <span
-                className={`invisible peer-focus:visible pl-2 pt-2 label-text-alt  ${passVal}`}
-              >
-                password must be 8 character long
-              </span>
-            </label>
+              <button className="btn mt-9" type="submit">
+                Register user
+              </button>
 
-            <button className="btn mt-9">Register user</button>
+              <ToastContainer />
 
-            <ToastContainer />
+              <p className=" text-center mt-2">
+                Go Back?{" "}
+                <Link to="/dashboard" className="underline font-bold">
+                  Dashboard
+                </Link>
+              </p>
+            </form>
+          </div>
+        </div>
 
-            <p className=" text-center mt-2">
-              Go Back?{" "}
-              <Link to="/dashboard" className="underline font-bold">
-                Dashboard
-              </Link>
-            </p>
-          </form>
+        <div className="signup_pict h-full bg-[#6ce1ca] w-[50%] hidden sm:block">
+          {}
         </div>
       </div>
-
-      <div className="signup_pict h-full bg-[#6ce1ca] w-[50%] hidden sm:block">
-        {}
-      </div>
-    </div>
-
     </>
   );
 };
