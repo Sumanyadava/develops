@@ -21,11 +21,11 @@ const userSchema = new mongoose.Schema({
       },
       inOutTime: [
         {
-          in: {
+          inTime: {
             type: Date,
             
           },
-          out: {
+          outTime: {
             type: Date,
             
           }

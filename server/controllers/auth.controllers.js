@@ -9,34 +9,27 @@ const hello = (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(400).json({ error: "user has no account" });
     }
-
     const validPassword = await bcrypt.compare(password, user.password)
     
-
     if (!validPassword) {
         res.status(400).json({ error: "password is incorrect" });
-      console.log(validPassword);
     } else {
       return res.status(200).json({ message: "Login success full" });
-
-    //   const token = jwt.sign({username : user.username}, process.env.JWT_KEY, {expiresIn: '2d'})
-
 
     }
   } catch (error) {
     console.log(error);
+    res.status(404).json({'message':"error during login"})
   }
 };
 
 
 const signin = async (req, res) => {
-  const { name, email, password, useRole, workingHours, } = req.body;
+  const { name, email, password, userRole, workingHours, inTime , outTime } = req.body;
 
   try {
     const exsistUSer = await User.findOne({ email: email });
@@ -51,16 +44,23 @@ const signin = async (req, res) => {
         username: name,
         email: email,
         password: hash_password,
-        userRole:useRole,
-        workingHours:workingHours
+        userRole:userRole,
+        workingHours:workingHours,
+        inOutTime:[
+          {
+          inTime: inTime,
+          outTime: outTime,
+        }
+      ]
       });
 
       await newUser.save();
-      return res.status(200).json({ message: "success full" });
+      return res.status(200).json({ message: "success full",data:newUser });
     }
 
   } catch (error) {
-    return res.status(500).json({ error: "an error occured",error });
+    console.log(error);
+    res.status(404).json({'message':"error during signin"})
   }
 };
 
