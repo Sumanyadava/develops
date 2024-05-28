@@ -28,7 +28,7 @@ const Login = ({ role, setRole }) => {
     } else if (val == "hrRadio") {
       setUserEmail("hremp@123");
       setRole(2);
-      setUserPassword("hr123");
+      setUserPassword("hremp@123");
     } else if (val == "adminRadio") {
       setUserEmail("admin@123");
       setRole(3);
@@ -37,21 +37,22 @@ const Login = ({ role, setRole }) => {
   };
   const handleSubmitSign = (e) => {
     e.preventDefault();
-    navigate("/dashboard");
-    // axios
-    //   .post("http://localhost:3002/api/auth/login", {
-    //     email: userEmail,
-    //     password: userPassword,
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //     toast.success("Login Successfull");
-    //     navigate("/home");
-    //   })
-    //   .catch((err) => {
-    //     toast.error(err.response.data.error);
-    //     console.log(err.response.data.error);
-    //   });
+    console.log(role)
+    axios
+      .post("http://localhost:3002/api/auth/login", {
+        email: userEmail,
+        password: userPassword,
+        userRole:role
+      })
+      .then((res) => {
+        console.log(res);
+        toast.success("Login Successfull");
+        navigate("/dashboard");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.error);
+        console.log(err.response.data.error);
+      });
   };
   return (
     <div className="flex h-full w-full text-black">

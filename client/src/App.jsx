@@ -9,24 +9,30 @@ import AdminHome from "./pages/AdminHome";
 import ErrorPage from "./pages/ErrorPage";
 import EmployeeList from "./pages/EmployeeList";
 import Header from "./components/Header";
+import NotAuth from "./components/NotAuth";
 
 function App() {
   const [role, setRole] = useState(3);
-  const [user,setUser] = useState({})
+  const [user, setUser] = useState({});
 
   return (
     <div className="h-screen w-screen ">
       <BrowserRouter>
-      <Header role={role} setRole={setRole} />
+        <Header role={role} setRole={setRole} />
         <Routes>
-          <Route path="/signin" element={<Signup role={role} />} />
-
           <Route
-            path="/login"
-            element={<Login role={role} setRole={setRole} />}
+            path="/signin"
+            element={role == 3 ? <Signup role={role} /> : <NotAuth />}
           />
 
-          <Route path="/dashboard" element={ role == 3 ? (<AdminHome role={role} />) : (<Home role={role} />)} />
+          <Route path="/" element={<Login role={role} setRole={setRole} />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              role == 3 ? <AdminHome role={role} /> : <Home role={role} />
+            }
+          />
 
           <Route
             path="/attendance"
@@ -41,7 +47,6 @@ function App() {
           {/* <Route path="/admin" element={<AdminHome role={role} />} /> */}
 
           <Route path="*" element={<ErrorPage />} />
-
         </Routes>
       </BrowserRouter>
     </div>

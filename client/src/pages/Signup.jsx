@@ -3,13 +3,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
 
 const Signup = ({ role }) => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userRole, setUserRole] = useState(1);
+  const [workingHour, setWorkingHour] = useState()
   const [eye, setEye] = useState("password");
   const [passVal, setpassVal] = useState("text-red-300");
 
@@ -43,24 +43,27 @@ const Signup = ({ role }) => {
     ) {
       toast.error("Please fill all the fields");
     } else {
-      // axios
-      //   .post("http://localhost:3002/api/auth/signin", {
-      //     name: userName,
-      //     email: userEmail,
-      //     password: userPassword,
-      //   })
-      //   .then((data) => {
-      //     toast.success("Signup Success");
-      //     console.log(userName, userEmail, userPassword);
-      //     setUserName("");
-      //     setUserEmail("");
-      //     setUserPassword("");
-      //     navigate("/");
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     toast.error("user already exsist");
-      //   });
+      axios
+        .post("http://localhost:3002/api/auth/signin", {
+          name: userName,
+          email: userEmail,
+          password: userPassword,
+          userRole:userRole,
+          workingHours:workingHour
+
+        })
+        .then((data) => {
+          toast.success("Signup Success");
+          console.log(userName, userEmail, userPassword);
+          setUserName("");
+          setUserEmail("");
+          setUserPassword("");
+          navigate("/dashboard");
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("user already exsist");
+        });
 
           console.log(userName, userEmail, userPassword,userRole);
     }
@@ -70,7 +73,7 @@ const Signup = ({ role }) => {
     <>
       <div className="flex h-full w-full text-black">
         <div className="signup_message bg-base-300 w-full sm:w-[50%] flex items-center justify-center">
-          <div className="signup_container bg-base-100 h-[600px] w-[400px] rounded-md">
+          <div className="signup_container bg-base-100 h-[650px] w-[400px] rounded-md">
             <form
               action=""
               className="w-full h-full flex flex-col p-5"
@@ -128,6 +131,15 @@ const Signup = ({ role }) => {
                 </select>
               </label>
 
+              <label className="form-control w-full mt-2">
+              <div className="label">
+                  <span className="">Employee working hour </span>
+                </div>
+                <input type="number" name="" id="" className="input input-bordered w-full bg-white" onChange={(e) => setWorkingHour(e.target.value)}/>
+              </label>
+
+
+
               <label className="form-control w-full mt-2 relative">
                 <div className="label">
                   <span className="">Write a password</span>
@@ -160,12 +172,12 @@ const Signup = ({ role }) => {
 
               <ToastContainer />
 
-              <p className=" text-center mt-2">
+              {/* <p className=" text-center mt-2">
                 Go Back?{" "}
                 <Link to="/dashboard" className="underline font-bold">
                   Dashboard
                 </Link>
-              </p>
+              </p> */}
             </form>
           </div>
         </div>

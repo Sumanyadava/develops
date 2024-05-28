@@ -20,7 +20,7 @@ const Header = ({ role, setRole }) => {
         ""
       ) : (
         <header className="header ">
-          <navbar className="navbar bg-base-100 flex flex-col sm:flex-row">
+          <nav className="navbar bg-base-100 flex flex-col sm:flex-row">
             <div className="flex-1">
               <Theme theme={theme}setTheme={setTheme}/>
               <a className="btn btn-ghost text-xl">
@@ -68,14 +68,14 @@ const Header = ({ role, setRole }) => {
                   className="btn btn-accent mr-5"
                   onClick={() => {
                     setRole(0);
-                    navigateg("/login");
+                    navigateg("/");
                   }}
                 >
-                  <Link to="/login"> Logout</Link>
+                 Logout
                 </button>
               </div>
             </div>
-          </navbar>
+          </nav>
         </header>
       )}
     </div>

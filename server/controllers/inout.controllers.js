@@ -37,12 +37,14 @@ const checkin = async (req,res) => {
       if(!outTime){
         return res.status(400).json({ message: 'outTime is required' });
       }
+
         const lastIndex = (user.inOutTime.length) -1
         user.inOutTime[lastIndex].outTime = outTime
         await user.save()
-        res.status(400).json({'message':"check out successful"})  
+        res.status(400).json({'message':"check out successful"})
     } catch (error) {
       console.error('Error during checkout:', error);
+      
       res.status(200).json({'message':"error during checkout"})
     }
   }

@@ -10,8 +10,8 @@ const userSchema = new mongoose.Schema({
     password: String,
     userRole: {
         type: String,
-        enum: ["admin", "hr", "employee"],
-        default: "admin",
+        enum: [1, 2, 3],
+        default: 1,
         required:true
       },
       workingHours: {
