@@ -6,20 +6,27 @@ import connectDB from "./config/db.js";
 // import router from "./router/user.router.js";
 // import router from "./router/inout.router.js";
 import router from "./router/router.js";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173","http://192.168.0.111:5173/"],
+    credentials: true,
+  })
+);
 app.use(express.json());
-dotenv.config();
+
+app.use(bodyParser.json());
+app.use(cookieParser());
+
+
 
 connectDB();
 
 app.use("/api", router);
-
-
-
-
-
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

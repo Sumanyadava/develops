@@ -1,65 +1,75 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Theme from "./Theme";
 import NotAuth from "./NotAuth";
+import Cookies from "js-cookie";
 
-const Header = ({ role, setRole }) => {
+const Header = ({ role, setRole, userNameCookie }) => {
   const navigateg = useNavigate();
 
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") :  "cupcake")
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") ? localStorage.getItem("theme") : "cupcake"
+  );
 
   useEffect(() => {
-    localStorage.setItem("theme",theme)
-    const localtheme = localStorage.getItem("theme")
-    document.querySelector('html').setAttribute('data-theme',localtheme)
-  }, [theme])
-  
+    localStorage.setItem("theme", theme);
+    const localtheme = localStorage.getItem("theme");
+    document.querySelector("html").setAttribute("data-theme", localtheme);
+  }, [theme]);
+
   return (
     <div className="">
-      {role == 0 ? (
+      {role === "0" || role == undefined ? (
         ""
       ) : (
         <header className="header ">
           <nav className="navbar bg-base-100 flex flex-col sm:flex-row">
             <div className="flex-1">
-              <Theme theme={theme}setTheme={setTheme}/>
+              <Theme theme={theme} setTheme={setTheme} />
               <a className="btn btn-ghost text-xl">
-                Attendance Portal -<div className="user">Employee Name</div>
+                Attendance Portal -<div className="user">{userNameCookie}</div>
               </a>
             </div>
             <div className="flex-1 justify-end">
-              {role === 1 ? (
+              {role === "1" ? (
                 <>
-                  <Link to="/dashboard" className="btn btn-ghost link">
+                  <NavLink
+                    to="/dashboard"
+                    className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}
+                    
+                  >
                     Dashboard
-                  </Link>
-                  <Link to="/attendance" className="btn btn-ghost link">
+                  </NavLink>
+                  <NavLink
+                    to="/attendance"
+                    className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}
+                  >
                     Attendance
-                  </Link>
+                  </NavLink>
                 </>
-              ) : role === 2 ? (
+              ) : role === "2" ? (
                 <>
-                  <Link to="/dashboard" className="btn btn-ghost link">
+                  <NavLink to="/dashboard" className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}>
                     Hr Dashboard
-                  </Link>
-                  <Link to="/attendance" className="btn btn-ghost link">
+                  </NavLink>
+                  <NavLink to="/attendance" className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}>
                     Attendance
-                  </Link>
-                  <Link to="/attendancereport" className="btn btn-ghost link">
+                  </NavLink>
+                  <NavLink to="/attendancereport" className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}>
                     Attendance Report
-                  </Link>
+                  </NavLink>
                 </>
-              ) : role === 3 ? (
+              ) : role === "3" ? (
                 <>
-                <Link to="/dashboard" className="btn btn-ghost link">
+                  <NavLink to="/dashboard" className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}>
                     Admin Dashboard
-                  </Link>
-                  <Link to="/signin" className="btn btn-ghost link">
+                  </NavLink>
+                  <NavLink to="/signin" className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}>
                     Add User
-                  </Link>
-                  <Link to="/attendancereport" className="btn btn-ghost link">
+                  </NavLink>
+                  <NavLink to="/attendancereport" className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}>
                     View User
-                  </Link>
+                  </NavLink>
                 </>
               ) : null}
 
@@ -67,11 +77,12 @@ const Header = ({ role, setRole }) => {
                 <button
                   className="btn btn-accent mr-5"
                   onClick={() => {
-                    setRole(0);
+                    setRole("0");
                     navigateg("/");
+                    Cookies.remove("userDATA");
                   }}
                 >
-                 Logout
+                  Logout
                 </button>
               </div>
             </div>

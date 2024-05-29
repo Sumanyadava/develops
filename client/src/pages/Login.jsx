@@ -1,15 +1,24 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from 'js-cookie'
 
 const Login = ({ role, setRole }) => {
   const [eye, setEye] = useState("password");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [userRoleLogin,setUSerRoleLogin] = useState(0)
+  
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Cookies.get('userDATA')) {
+      navigate('/dashboard')
+    }
+  })
 
   const handleshow = () => {
     if (eye === "password") {
@@ -23,26 +32,27 @@ const Login = ({ role, setRole }) => {
     const val = e.target.value;
     if (val == "employeeRadio") {
       setUserEmail("employee@132");
-      setRole(1);
-      setUserPassword("emp123");
+      setUSerRoleLogin(1);
+      setUserPassword("emp12345");
     } else if (val == "hrRadio") {
       setUserEmail("hremp@123");
-      setRole(2);
+      setUSerRoleLogin(2);
       setUserPassword("hremp@123");
     } else if (val == "adminRadio") {
       setUserEmail("admin@123");
-      setRole(3);
+      setUSerRoleLogin(3);
       setUserPassword("admin123");
     }
   };
   const handleSubmitSign = (e) => {
     e.preventDefault();
-    console.log(role)
     axios
       .post("http://localhost:3002/api/auth/login", {
         email: userEmail,
         password: userPassword,
-        userRole:role
+        userRole:userRoleLogin
+      },{
+        withCredentials:true
       })
       .then((res) => {
         console.log(res);
@@ -53,6 +63,8 @@ const Login = ({ role, setRole }) => {
         toast.error(err.response.data.error);
         console.log(err.response.data.error);
       });
+
+      
   };
   return (
     <div className="flex h-full w-full text-black">
@@ -118,9 +130,9 @@ const Login = ({ role, setRole }) => {
             <select
               name="userRole"
               id="userRole"
-              value={role}
+              value={userRoleLogin}
               onChange={(e) => {
-                setRole(e.target.value);
+                setUSerRoleLogin(e.target.value);
               }}
               className="bg-inherit border-b-2 border-gray-400 focus:border-black outline-none text-black font-Robo p-2"
             >
@@ -155,7 +167,7 @@ const Login = ({ role, setRole }) => {
               className="btn border-black text-black hover:bg-gray-100 "
               onClick={() => {
                 setUserEmail("");
-                setRole(0);
+                setUSerRoleLogin('null');
                 setUserPassword("");
               }}
             >

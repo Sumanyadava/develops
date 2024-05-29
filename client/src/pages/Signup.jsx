@@ -9,7 +9,7 @@ const Signup = ({ role }) => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userRole, setUserRole] = useState(1);
-  const [workingHour, setWorkingHour] = useState()
+  const [workingHour, setWorkingHour] = useState("")
   const [eye, setEye] = useState("password");
   const [passVal, setpassVal] = useState("text-red-300");
 
@@ -54,11 +54,13 @@ const Signup = ({ role }) => {
         })
         .then((data) => {
           toast.success("Signup Success");
-          console.log(userName, userEmail, userPassword);
+          // console.log(userName, userEmail, userPassword);
           setUserName("");
           setUserEmail("");
           setUserPassword("");
-          navigate("/dashboard");
+          setUserRole(1)
+          setWorkingHour("")
+
         })
         .catch((err) => {
           console.log(err);

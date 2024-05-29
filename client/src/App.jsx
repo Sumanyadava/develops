@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -10,49 +10,73 @@ import ErrorPage from "./pages/ErrorPage";
 import EmployeeList from "./pages/EmployeeList";
 import Header from "./components/Header";
 import NotAuth from "./components/NotAuth";
+import Cookies from "js-cookie";
+import authChecker from "./utils/helper.util.jsx";
+// import { CookiesProvider,useCookies } from 'react-cookie';
 
 function App() {
-  const [role, setRole] = useState(3);
-  const [user, setUser] = useState({});
+  const [role, setRole] = useState(null);
+  const [userNameCookie,setUserNameCookie] = useState()
+  const [emailCookie,setEmailCookie] = useState()
+  let location = useLocation()
+
+
+  //reading the cookie on path change to ensure authentication
+  useEffect(() =>{
+    const userDataCookie = Cookies.get("userDATA");
+    if (!userDataCookie) {
+      setRole('0');
+    } else {
+      try {
+        const { userRole,username,email } = JSON.parse(userDataCookie);
+        setRole(userRole);
+        setUserNameCookie(username)
+        setEmailCookie(email)
+      } catch (error) {
+        console.error('Error parsing userDATA cookie:', error);
+        setRole('0');
+      }
+    }
+  }, [location.pathname]);
 
   return (
-    <div className="h-screen w-screen ">
-      <BrowserRouter>
-        <Header role={role} setRole={setRole} />
+    <div className="h-screen w-full ">
+      
+        
+
+        <Header role={role} setRole={setRole} userNameCookie={userNameCookie} />
         <Routes>
           <Route
-            path="/signin"
-            element={role == 3 ? <Signup role={role} /> : <NotAuth />}
+            path="/signin" 
+            element={authChecker(role == 3 ? <Signup role={role} /> : <NotAuth />)}
           />
 
           <Route path="/" element={<Login role={role} setRole={setRole} />} />
 
           <Route
             path="/dashboard"
-            element={
-              role == 3 ? <AdminHome role={role} /> : <Home role={role} />
+            element={authChecker(
+              role == 3 ? <AdminHome role={role} /> : <Home role={role} emailCookie={emailCookie} />
+            )
             }
           />
 
           <Route
             path="/attendance"
-            element={<EmployeeAttendance role={role} />}
+            element={authChecker(<EmployeeAttendance role={role} userNameCookie={userNameCookie} emailCookie={emailCookie} />)}
           />
 
           <Route
             path="/attendancereport"
-            element={<EmployeeList role={role} />}
+            element={authChecker(<EmployeeList role={role} />)}
           />
-
-          {/* <Route path="/admin" element={<AdminHome role={role} />} /> */}
 
           <Route path="*" element={<ErrorPage />} />
         </Routes>
-      </BrowserRouter>
     </div>
   );
 }
 
-//todo: how can i use react router as header and element
+//todo:  mobile test  - readme file  - edit and delete user - forgot password (opt) - search function (opt) 
 
 export default App;

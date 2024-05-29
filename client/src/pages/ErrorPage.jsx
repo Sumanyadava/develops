@@ -7,7 +7,7 @@ const ErrorPage = () => {
       <h1 className="text-center m-20 text-6xl">
         Error 404 :-route not found{" "}
       </h1>
-      <Link to="/" className="bg-red-500 text-center p-2 m-24">
+      <Link to="/" className="bg-red-500 text-center p-2 m-10 btn">
         back to home
       </Link>
     </div>

@@ -7,7 +7,9 @@ const NotAuth = () => {
       <h1 className='text-3xl text-center'>
         You are not authenticated to see this 
       </h1>
-      <Link to="/dashboard" className='bg-red-500 p-1 m-5'>Goo back</Link>
+      
+
+      <Link to="/" className='bg-blue-500 p-2 m-10 btn'>Go back</Link>
     </div>
   )
 }
