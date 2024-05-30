@@ -11,12 +11,13 @@ import bodyParser from "body-parser";
 dotenv.config();
 
 const app = express();
-app.use(
-  cors({
-    origin: ["http://localhost:5173","http://192.168.0.111:5173/","https://developsclient.vercel.app/"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["http://localhost:5173","http://192.168.0.111:5173/","https://developsclient.vercel.app/"],
+//     credentials: true,
+//   })
+// );
+app.use(cors());
 app.use(express.json());
 
 app.use(bodyParser.json());
