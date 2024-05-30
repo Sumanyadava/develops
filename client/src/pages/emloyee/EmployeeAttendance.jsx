@@ -104,7 +104,7 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
     const inOutReport = async () => {
       try {
         const res = await axios.post(
-          "https://develops.vercel.app/api/check/inouttime",
+          "http://localhost:3002/api/check/inouttime",
           {
             email: userEmail,
           }

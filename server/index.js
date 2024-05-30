@@ -14,14 +14,15 @@ const app = express();
 app.use(
   cors({
     origin: [
+      "http://192.168.0.111:5173",
       "http://localhost:5173",
-      "http://192.168.0.111:5173/",
-      "https://developsclient.vercel.app/",
+      "*"
     ],
+    credentials:true,
     
   })
 );
-// app.use(cors());
+
 app.use(express.json());
 
 app.use(bodyParser.json());
@@ -32,6 +33,8 @@ connectDB();
 app.get("/", (req, res) => {
   res.send("Welcome to my API");
 });
+
+app.options('*', cors());
 
 app.use("/api", router);
 

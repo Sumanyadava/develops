@@ -55,9 +55,9 @@ function App() {
 
           <Route
             path="/dashboard"
-            element={
+            element={authChecker(
               role == 3 ? <AdminHome role={role} /> : <Home role={role} emailCookie={emailCookie} />
-            
+            )
             }
           />
 

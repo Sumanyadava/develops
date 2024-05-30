@@ -15,7 +15,6 @@ const EmployeeHome = ({ emailCookie }) => {
   const [checkOutTime, setCheckOutTime] = useState("");
   // let location = useLocation()
 
-
   //clock displaying time
   const date = `${currentTime.getDate()} / ${currentTime.getMonth()} / ${currentTime.getFullYear()}`;
 
@@ -29,48 +28,45 @@ const EmployeeHome = ({ emailCookie }) => {
     };
   }, []);
 
-
   //validating check in / out
   useEffect(() => {
     const CheckInOutTime = async () => {
       try {
-        const res = await axios.post("https://develops.vercel.app/api/check/time", {
-        email: emailCookie,
-      })
-      const { inTime, outTime } = res.data.data;
-      const lastCheckInDate = inTime ? new Date(inTime).getDate() : null;
-      const lastCheckOutDate = outTime ? new Date(outTime).getDate() : null;
+        const res = await axios.post("http://localhost:3002/api/check/time", {
+          email: emailCookie,
+        });
+        const { inTime, outTime } = res.data.data;
+        const lastCheckInDate = inTime ? new Date(inTime).getDate() : null;
+        const lastCheckOutDate = outTime ? new Date(outTime).getDate() : null;
 
-      if (lastCheckInDate == currentTime.getDate()) {
-        setCheckIn(false);
-        setCheckOut(true);
-        setCheckInTime(new Date(inTime).toLocaleTimeString());
-      }else{
-        setCheckIn(true);
-        setCheckOut(false);
-        setCheckInTime("");
-      }
-      if (lastCheckOutDate == currentTime.getDate()) {
-        setCheckOut(false);
-        setCheckOutTime(new Date(outTime).toLocaleTimeString());
-      }else if (lastCheckInDate !== currentTime.getDate()) {
-        setCheckOut(false);
-        setCheckOutTime("");
-      }
-
+        if (lastCheckInDate == currentTime.getDate()) {
+          setCheckIn(false);
+          setCheckOut(true);
+          setCheckInTime(new Date(inTime).toLocaleTimeString());
+        } else {
+          setCheckIn(true);
+          setCheckOut(false);
+          setCheckInTime("");
+        }
+        if (lastCheckOutDate == currentTime.getDate()) {
+          setCheckOut(false);
+          setCheckOutTime(new Date(outTime).toLocaleTimeString());
+        } else if (lastCheckInDate !== currentTime.getDate()) {
+          setCheckOut(false);
+          setCheckOutTime("");
+        }
       } catch (error) {
         console.log("error here ", error);
       }
-    }
-    
-    CheckInOutTime()
+    };
 
-  }, [emailCookie,currentTime.getDate()]);
+    CheckInOutTime();
+  }, [emailCookie, currentTime.getDate()]);
 
   const handleCheckIn = () => {
     // console.log(currentTime);
     axios
-      .post("https://develops.vercel.app/api/check/in", {
+      .post("http://localhost:3002/api/check/in", {
         email: emailCookie,
         inTime: currentTime,
       })
@@ -89,14 +85,14 @@ const EmployeeHome = ({ emailCookie }) => {
   };
 
   const handleCheckOut = () => {
-    axios.post("https://develops.vercel.app/api/check/out", {
-      email:emailCookie,
-      outTime:currentTime
-  })
+    axios
+      .post("http://localhost:3002/api/check/out", {
+        email: emailCookie,
+        outTime: currentTime,
+      })
       .then((res) => {
         toast.success("check out Successfull");
 
-        
         setCheckOut(false);
 
         const newCheckOutTime = new Date(currentTime).toLocaleTimeString();

@@ -58,7 +58,11 @@ const login = async (req, res) => {
           res.cookie(
             "userDATA",
             JSON.stringify({ email: user.email, userRole: user.userRole, username: user.username }),
-            { maxAge: 9000000, httpOnly: false, secure: false }
+            { 
+              maxAge: 9000000, 
+              httpOnly: false, 
+              secure: false,
+            }
           );
 
           res.status(200).json({ message: "Login success full"  });

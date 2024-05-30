@@ -22,7 +22,7 @@ const Signup = ({ role }) => {
 
     //filling the fields with user data
     axios
-      .get("https://develops.vercel.app/api/auth/single", {
+      .get("http://localhost:3002/api/auth/single", {
         headers: {
           email: userEmailSearch,
         },
@@ -67,7 +67,7 @@ const Signup = ({ role }) => {
     ) {
       toast.error("Please fill all the fields");
     } else {
-      axios.post("https://develops.vercel.app/api/auth/signin", {
+      axios.post("http://localhost:3002/api/auth/signin", {
           name: userName,
           email: userEmail,
           password: userPassword,
@@ -97,7 +97,7 @@ const Signup = ({ role }) => {
     console.log("edit");
     try {
       axios
-      .put("https://develops.vercel.app/api/auth/singleedit", {
+      .put("http://localhost:3002/api/auth/singleedit", {
         name: userName,
         email: userEmail,
         userRole: userRole,
