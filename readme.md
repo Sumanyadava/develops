@@ -59,6 +59,8 @@ link to demo -
    ```bash
    npm install
    ```
+3.1 Rename .env.sample file to .env 
+
 
 4. Start the server:
 
