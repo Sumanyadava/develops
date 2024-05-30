@@ -30,12 +30,12 @@ const Header = ({ role, setRole, userNameCookie }) => {
                 Attendance Portal -<div className="user">{userNameCookie}</div>
               </a>
             </div>
-            <div className="flex-1 justify-end">
+            <div className="flex-1 justify-end gap-2  text-sm flex-wrap sm:justify-end">
               {role === "1" ? (
                 <>
                   <NavLink
                     to="/dashboard"
-                    className={({isActive}) => `btn btn-ghost link"   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}
+                    className={({isActive}) => `btn btn-ghost link text-sm "   ${!isActive ? "" : "bg-red-500 hover:bg-red-400"}`}
                     
                   >
                     Dashboard

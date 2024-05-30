@@ -3,28 +3,56 @@ import Header from "../components/Header";
 import { useLocation, useNavigate } from "react-router-dom";
 import NotAuth from "../components/NotAuth";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
-const EmployeeList = ({ role }) => {
+const EmployeeList = ({ role, emailCookie }) => {
   const [allTable, setAllTable] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const allUser = async () => {
       try {
         const res = await axios.get("http://localhost:3002/api/auth/all");
-        // console.log(res.data);
-        setAllTable(res.data);
+        // filter the self user 
+        const filteredData = res.data.filter((user) => user.email !== emailCookie);
+        setAllTable(filteredData);
+        setFilteredData(filteredData)
       } catch (error) {
         console.log("error here ", error);
       }
     };
 
     allUser();
-  }, []);
+  }, [emailCookie]);
 
   const handleViewAttendance = (email) => {
     navigate(`/attendance?email=${email}`);
   };
+
+  const handleDelete = async (email) => {
+    console.log(email);
+    try {
+      const res = await axios.delete("http://localhost:3002/api/auth/delete", {
+        data:{email},
+      });
+      console.log(res.data);
+      toast.success(res.data.message)
+    } catch (error) {
+      console.error("Error deleting user here :", error);
+    }
+  }; 
+  const handleEdit = (email) => {
+    navigate(`/signin?email=${email}`)
+  }
+
+  const handleSearch = () => {
+    const filterData = allTable.filter((user) => 
+      user.username.toLowerCase().includes(search.toLocaleLowerCase())
+    )
+    setFilteredData(filterData)
+  }
 
   return (
     <div>
@@ -37,7 +65,10 @@ const EmployeeList = ({ role }) => {
           <main className="">
             <div className="data_show flex m-4 gap-4 p-4 border-b-4 ">
               <label className="input input-bordered flex items-center gap-2 border border-b-4">
-                <input type="text" className="grow" placeholder="Search" />
+                <input type="text" className="grow" placeholder="Search name" 
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"
@@ -52,7 +83,7 @@ const EmployeeList = ({ role }) => {
                 </svg>
               </label>
 
-              <button className="btn">search</button>
+              <button className="btn" onClick={handleSearch} >search</button>
             </div>
 
             <div className="report">
@@ -77,56 +108,58 @@ const EmployeeList = ({ role }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allTable.map((ele, index) => {
+                    {filteredData.map((ele, index) => {
                       const name = ele.username;
-                      const email = ele.email
-                      const roletable = ele.userRole
-                      
+                      const email = ele.email;
+                      const roletable = ele.userRole;
 
                       return (
-                        <tr key={ele._id.$oid}>
+                        <tr key={ele._id}>
                           <td>{index + 1}</td>
                           <th>{name}</th>
                           <td>{email}</td>
-                          <td>{
-                          roletable == 1 
-                          ? "Employee" : roletable == 2 
-                          ? "HR" : roletable == 3 
-                          ? "Admin" : "null" }</td>
-                          <td><button
-                          className="btn btn-secondary"
-                          onClick={() => handleViewAttendance(email)}
-                        >
-                          view Attendance
-                        </button>
-                        
-                        </td>
-                        {
-                          role == 3 ? (
+                          <td>
+                            {roletable == 1
+                              ? "Employee"
+                              : roletable == 2
+                              ? "HR"
+                              : roletable == 3
+                              ? "Admin"
+                              : "null"}
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-secondary"
+                              onClick={() => handleViewAttendance(email)}
+                            >
+                              view Attendance
+                            </button>
+                          </td>
+                          {role == 3 ? (
                             <>
-                          <td>
-                            <button
-                              className="btn btn-primary"
-                              onClick={() => handleViewAttendance}
-                            >
-                              Edit
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-primary"
-                              onClick={handleViewAttendance}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </>
-                          ) : ("")
-                        }
+                              <td>
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={() => handleEdit(email)}
+                                >
+                                  Edit
+                                </button>
+                              </td>
+                              <td>
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={() => handleDelete(email)}
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </>
+                          ) : (
+                            ""
+                          )}
                         </tr>
                       );
                     })}
-                    
                   </tbody>
                 </table>
               </div>
@@ -134,6 +167,7 @@ const EmployeeList = ({ role }) => {
           </main>
         </>
       )}
+      <ToastContainer />
     </div>
   );
 };

@@ -1,16 +1,22 @@
-import { Router } from 'express'
-import { allUser, hello, login, signin  } from '../controllers/auth.controllers.js';
+import { Router } from "express";
+import {
+  allUser,
+  deleteUser,
+  hello,
+  login,
+  signin,
+  singleUser,
+  singleEdit
+} from "../controllers/auth.controllers.js";
 
-
-
-const router = Router()
+const router = Router();
 
 router.get("/hello", hello);
 router.get("/all", allUser);
-router.post("/login", login)
+router.get("/single", singleUser);
+router.post("/login", login);
 router.post("/signin", signin);
+router.put("/signinedit", singleEdit);
+router.delete("/delete", deleteUser);
 
-
-  
-
-export default router
+export default router;

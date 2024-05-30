@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+
 const NotAuth = () => {
   return (
     <div>
@@ -9,7 +10,9 @@ const NotAuth = () => {
       </h1>
       
 
-      <Link to="/" className='bg-blue-500 p-2 m-10 btn'>Go back</Link>
+      <Link to="/" className="btn mt-2" onClick={() => {navigate(-1)}}>
+                  Go back
+      </Link>
     </div>
   )
 }

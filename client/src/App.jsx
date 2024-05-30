@@ -68,7 +68,7 @@ function App() {
 
           <Route
             path="/attendancereport"
-            element={authChecker(<EmployeeList role={role} />)}
+            element={authChecker(<EmployeeList role={role} emailCookie={emailCookie} />)}
           />
 
           <Route path="*" element={<ErrorPage />} />
@@ -77,6 +77,6 @@ function App() {
   );
 }
 
-//todo:  mobile test  - readme file  - edit and delete user - forgot password (opt) - search function (opt) 
+//todo: punchuality - excel -  hosting |opt|  readme-file  forgot password 
 
 export default App;

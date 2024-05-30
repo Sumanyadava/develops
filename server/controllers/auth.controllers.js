@@ -14,6 +14,32 @@ const allUser = async (req,res) => {
   }
 }
 
+const singleUser = async (req,res) => {
+  try {
+    const {email} = req.headers;
+    
+    const user = await User.findOne({email})
+    res.json(user)
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
+}
+
+const deleteUser = async (req,res) => {
+  const {email} = req.body;
+  try {
+    const dUser = await User.findOneAndDelete({email})
+    if (!dUser) {
+      res.status(404).json({message:"user not found"})
+    }else{
+      res.status(200).json({message:"user deleted successfully"})
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
 const login = async (req, res) => {
   try {
     const { email, password, userRole } = req.body;
@@ -66,12 +92,7 @@ const signin = async (req, res) => {
         password: hash_password,
         userRole: userRole,
         workingHours: workingHours,
-        inOutTime: [
-          {
-            inTime: inTime,
-            outTime: outTime,
-          },
-        ],
+        
       });
 
       await newUser.save();
@@ -83,4 +104,27 @@ const signin = async (req, res) => {
   }
 };
 
-export { login, signin, hello,allUser };
+const singleEdit = async (req, res) => {
+  const { name, email, userRole, workingHours } =
+    req.body;
+
+  try {
+    const exsistUSer = await User.findOneAndUpdate({ email: email },{username: name,
+      email: email,
+      userRole: userRole,
+      workingHours: workingHours
+    });
+
+  
+
+      
+      return res.status(200).json({ message: "successfull edited" });
+    
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "error during edit" });
+  }
+};
+
+
+export { login, signin, hello,allUser,singleUser ,deleteUser , singleEdit};

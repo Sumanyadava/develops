@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "../components/Header";
 import NotAuth from "../components/NotAuth";
 
 const AdminHome = ({ role }) => {
@@ -9,7 +8,7 @@ const AdminHome = ({ role }) => {
         <>
           
           <div className="button_wrapper">
-            <div className="view text-9xl text-center mt-20">
+            <div className="view text-2xl text-center mt-20 sm:text-9xl">
               Welcome Admin:
             </div>
           </div>

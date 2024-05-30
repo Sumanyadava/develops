@@ -55,13 +55,12 @@ const Login = ({ role, setRole }) => {
         withCredentials:true
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         toast.success("Login Successfull");
         navigate("/dashboard");
       })
       .catch((err) => {
         toast.error(err.response.data.error);
-        console.log(err.response.data.error);
       });
 
       
