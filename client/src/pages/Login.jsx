@@ -70,7 +70,7 @@ const Login = ({ role, setRole }) => {
       <div className="login_pict h-full bg-[#6ce1ca] w-[50%] hidden sm:block"></div>
       <div className="login_message bg-base-100 w-full sm:w-[50%] flex items-center justify-evenly flex-col shadow-md">
         <div className="fake_login bg-base-300 rounded-xl h-[150px] w-[350px] flex justify-center flex-col p-5">
-          <h1 className="text-xl">Login as a </h1>
+          <h1 className="text-sm label-text">Test with these data </h1>
           {/* ------------form starts ----- */}
           <div className="form-control">
             <label className="label cursor-pointer">
@@ -110,8 +110,8 @@ const Login = ({ role, setRole }) => {
           </div>
           {/* --------form ends ---- */}
         </div>
-        <div className="login_container bg-base-300  h-[500px] w-[350px] rounded-md p-2">
-          <h2 className="font-bold font-lobs text-5xl p-3">Welcome back !</h2>
+        <div className="login_container bg-base-300  h-[400px] w-[350px] rounded-md p-2">
+          <h2 className="font-bold font-lobs text-3xl p-3 md:4xl">Welcome back !</h2>
 
           <form
             action=""
