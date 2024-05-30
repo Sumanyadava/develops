@@ -34,7 +34,7 @@ const EmployeeHome = ({ emailCookie }) => {
   useEffect(() => {
     const CheckInOutTime = async () => {
       try {
-        const res = await axios.post("http://localhost:3002/api/check/time", {
+        const res = await axios.post("https://develops.vercel.app/api/check/time", {
         email: emailCookie,
       })
       const { inTime, outTime } = res.data.data;
@@ -70,7 +70,7 @@ const EmployeeHome = ({ emailCookie }) => {
   const handleCheckIn = () => {
     // console.log(currentTime);
     axios
-      .post("http://localhost:3002/api/check/in", {
+      .post("https://develops.vercel.app/api/check/in", {
         email: emailCookie,
         inTime: currentTime,
       })
@@ -89,7 +89,7 @@ const EmployeeHome = ({ emailCookie }) => {
   };
 
   const handleCheckOut = () => {
-    axios.post("http://localhost:3002/api/check/out", {
+    axios.post("https://develops.vercel.app/api/check/out", {
       email:emailCookie,
       outTime:currentTime
   })
