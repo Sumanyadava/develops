@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173","http://192.168.0.111:5173/"],
+    origin: '*',
     credentials: true,
   })
 );
@@ -25,6 +25,10 @@ app.use(cookieParser());
 
 
 connectDB();
+
+app.get('/',(req,res)=>{
+  res.send('Welcome to my API');
+})
 
 app.use("/api", router);
 
