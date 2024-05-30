@@ -13,8 +13,12 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173","http://192.168.0.111:5173/","https://developsclient.vercel.app/"],
-    credentials: true,
+    origin: [
+      "http://localhost:5173",
+      "http://192.168.0.111:5173/",
+      "https://developsclient.vercel.app/",
+    ],
+    
   })
 );
 // app.use(cors());
@@ -23,13 +27,11 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-
-
 connectDB();
 
-app.get('/',(req,res)=>{
-  res.send('Welcome to my API');
-})
+app.get("/", (req, res) => {
+  res.send("Welcome to my API");
+});
 
 app.use("/api", router);
 
