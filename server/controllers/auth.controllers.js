@@ -105,14 +105,14 @@ const signin = async (req, res) => {
 };
 
 const singleEdit = async (req, res) => {
-  const { name, email, userRole, workingHours } =
+  const { name, email, userRole, workingHours, } =
     req.body;
 
   try {
     const exsistUSer = await User.findOneAndUpdate({ email: email },{username: name,
       email: email,
       userRole: userRole,
-      workingHours: workingHours
+      workingHours: workingHours,
     });
 
   

@@ -102,14 +102,17 @@ const Signup = ({ role }) => {
         email: userEmail,
         userRole: userRole,
         workingHours: workingHour,
+        
       })
       .then((data) => {
-        toast.success("edited successful");
+        
         setUserName("");
         setUserEmail("");
         setUserPassword("");
         setUserRole(1);
         setWorkingHour("");
+        navigate(-1)
+        toast.success("edited successful");
       })
       .catch((err) => console.error(err));
     } catch (error) {
@@ -122,7 +125,7 @@ const Signup = ({ role }) => {
     <>
       <div className="flex h-full w-full text-black">
         <div className="signup_message bg-base-300 w-full sm:w-[50%] flex items-center justify-center">
-          <div className="signup_container bg-base-100 h-[650px] w-[400px] rounded-md">
+          <div className="signup_container bg-base-100 h-[700px] w-[400px] rounded-md">
             <form
               action=""
               className="w-full h-full flex flex-col p-5"
@@ -207,7 +210,7 @@ const Signup = ({ role }) => {
 
                 <input
                   type={eye}
-                  placeholder="Type here"
+                  placeholder={userEmailSearch ? "Reset Their password" :"Type here"}
                   required
                   disabled={Boolean(userEmailSearch)}
                   className="peer input input-bordered w-full bg-white "
@@ -228,9 +231,7 @@ const Signup = ({ role }) => {
               {userEmailSearch && (
                 <button
                   className="btn mt-2"
-                  onClick={() => {
-                    navigate(-1);
-                  }}
+                  
                 >
                   cancel
                 </button>

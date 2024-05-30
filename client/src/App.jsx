@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -10,9 +10,9 @@ import ErrorPage from "./pages/ErrorPage";
 import EmployeeList from "./pages/EmployeeList";
 import Header from "./components/Header";
 import NotAuth from "./components/NotAuth";
-import Cookies from "js-cookie";
 import authChecker from "./utils/helper.util.jsx";
-// import { CookiesProvider,useCookies } from 'react-cookie';
+import Cookies from "js-cookie";
+
 
 function App() {
   const [role, setRole] = useState(null);
@@ -77,6 +77,6 @@ function App() {
   );
 }
 
-//todo: day wise -  hosting |opt|  readme-file - forgot password 
+
 
 export default App;
