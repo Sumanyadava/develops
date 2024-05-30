@@ -75,9 +75,9 @@ const inoutTime = async (req,res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(400).json("no user found");
+      res.status(404).json("no user found");
     } else {
-      res.status(200).json({data:user.inOutTime})
+      res.status(200).json({data:user})
       
     }
   } catch (error) {

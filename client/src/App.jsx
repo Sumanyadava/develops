@@ -77,6 +77,6 @@ function App() {
   );
 }
 
-//todo: punchuality - excel -  hosting |opt|  readme-file  forgot password 
+//todo: day wise -  hosting |opt|  readme-file - forgot password 
 
 export default App;

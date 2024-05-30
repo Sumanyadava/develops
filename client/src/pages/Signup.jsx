@@ -92,7 +92,7 @@ const Signup = ({ role }) => {
       console.log(userName, userEmail, userPassword, userRole);
     }
   };
-  const handleEdit = () => {
+  const handleEdit = (e) => {
     e.preventDefault();
     console.log("edit");
     try {
@@ -100,7 +100,6 @@ const Signup = ({ role }) => {
       .put("http://localhost:3002/api/auth/singleedit", {
         name: userName,
         email: userEmail,
-        password: userPassword,
         userRole: userRole,
         workingHours: workingHour,
       })

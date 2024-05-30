@@ -1,15 +1,92 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { CSVLink } from "react-csv";
 
 const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
   const [tableReport, setTableReport] = useState([]);
-  const [searchParams] = useSearchParams()
+  const [workingHoursReq, setWorkingHourReq] = useState();
+  const [searchParams] = useSearchParams();
+
+  const userEmail = searchParams.get("email") || emailCookie;
+
+  const headersCSV = [
+    { label: "Index", key: "index" },
+    { label: "Date", key: "date" },
+    { label: "Checkin", key: "check_in" },
+    { label: "Check Out", key: "check_out" },
+    { label: "Attendance", key: "attendance" },
+
+    role == 2
+      ? (
+        { label: "Working Hours", key: "working_hours" }
+      )
+      : { label: "", key: "" },
+
+      
+    role == 2
+    ? (
+      { label: "Review", key: "review" }
+    )
+    : { label: "", key: "" },
+
+    
+  ];
+
+  const csvLink = {
+    filename: "EmployeeAttendance.csv",
+    headers: headersCSV,
+    data: tableReport.map((ele, index) => {
+      const inTime = ele.inTime
+        ? new Date(ele.inTime).toLocaleTimeString()
+        : "N/A";
+      const outTime = ele.outTime
+        ? new Date(ele.outTime).toLocaleTimeString()
+        : "N/A";
+      const day =
+        ele.inTime === "N/A"
+          ? "N/A"
+          : new Date(ele.inTime).toLocaleDateString();
+      const wDay =
+        ele.outTime && ele.inTime
+          ? (
+              (new Date(ele.outTime) - new Date(ele.inTime)) /
+              (1000 * 60 * 60)
+            ).toFixed(2)
+          : "N/A";
+
+          const Rev =   ele.inTime
+          ? (new Date(ele.inTime).setHours(9, 0, 0, 0) -
+              new Date(ele.inTime)) /
+              (1000 * 60) >
+            0
+            ? (
+                (new Date(ele.inTime).setHours(9, 0, 0, 0) -
+                  new Date(ele.inTime)) /
+                (1000 * 60)
+              ).toFixed() + " min early"
+            : Math.abs(
+                (new Date(ele.inTime).setHours(9, 0, 0, 0) -
+                  new Date(ele.inTime)) /
+                  (1000 * 60)
+              ).toFixed() + " min late"
+          : "Absent"
+
+      return {
+        index: index + 1,
+        date: day,
+        check_in: inTime,
+        check_out: outTime,
+        attendance: inTime === "N/A" ? "absent" : "present",
+        working_hours: wDay,
+        review:Rev
+      };
+    }),
+  };
+
   
-  const userEmail = searchParams.get('email') || emailCookie;
 
   useEffect(() => {
-    console.log(userEmail);
     const inOutReport = async () => {
       try {
         const res = await axios.post(
@@ -19,7 +96,8 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
           }
         );
         // console.log(res.data.data);
-        setTableReport(res.data.data);
+        setTableReport(res.data.data.inOutTime);
+        setWorkingHourReq(res.data.data.workingHours);
       } catch (error) {
         console.log("error here ", error);
       }
@@ -27,7 +105,30 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
     if (userEmail) {
       inOutReport();
     }
-  }, [userNameCookie, userEmail,]);
+  }, [userNameCookie, userEmail]);
+
+  //1 month date
+  const generateDaysInMonth = () => {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    const days = [];
+    for (let i = 1; i <= daysInMonth; i++) {
+      const date = new Date(currentYear, currentMonth, i);
+      days.push(date.toLocaleDateString());
+    }
+
+    return days;
+  };
+
+  //check if employee has attendance
+  const hasAttendanceData = (date) => {
+    return tableReport.some((ele) => {
+      return new Date(ele.inTime).toLocaleDateString() === date;
+    });
+  };
 
   return (
     <div>
@@ -35,7 +136,9 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
         <div className="show_emp_data flex justify-around items-center p-4 bg-gray-600">
           <div className="emp_name text-3xl">{userEmail || userNameCookie}</div>
           <div className="export_excel">
-            <button className="btn btn-success">Export to Excel</button>
+            <button className="btn btn-success">
+              <CSVLink {...csvLink}>Export to Excel</CSVLink>
+            </button>
           </div>
         </div>
 
@@ -49,10 +152,18 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
                 <th>Checkin</th>
                 <th>Check Out</th>
                 <th>Attendance </th>
+                {role == 2 ? (
+                  <>
+                    <th>Working Hour = {workingHoursReq}</th>
+                    <th>Review ( 9:00 AM )</th>
+                  </>
+                ) : (
+                  ""
+                )}
               </tr>
             </thead>
             <tbody>
-              {tableReport.map((ele, index) => {
+               {/* {tableReport.map((ele, index) => {
                 const inTime = ele.inTime
                   ? new Date(ele.inTime).toLocaleTimeString()
                   : "N/A";
@@ -71,6 +182,122 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
                     <td>{inTime}</td>
                     <td>{outTime}</td>
                     <td>{inTime == "N/A" ? "absent" : "Present"}</td>
+                    {role == 2 ? (
+                      <>
+                        <td>
+                          {ele.outTime && ele.inTime
+                            ? (
+                                (new Date(ele.outTime) - new Date(ele.inTime)) /
+                                (1000 * 60 * 60)
+                              ).toFixed(2)
+                            : "N/A"}
+                        </td>
+                        <td 
+                        style={{
+                          color:
+                            ele.inTime
+                              ? (new Date(ele.inTime).setHours(9, 0, 0, 0) -
+                                  new Date(ele.inTime)) /
+                                  (1000 * 60) >
+                                0
+                                ? "green"
+                                : "red"
+                              : "inherit",
+                        }}  
+                        
+                        >
+                          {ele.inTime
+                            ? (new Date(ele.inTime).setHours(9, 0, 0, 0) -
+                                new Date(ele.inTime)) /
+                                (1000 * 60) >
+                              0
+                              ? (
+                                  (new Date(ele.inTime).setHours(9, 0, 0, 0) -
+                                    new Date(ele.inTime)) /
+                                  (1000 * 60)
+                                ).toFixed() + " min early"
+                              : Math.abs(
+                                  (new Date(ele.inTime).setHours(9, 0, 0, 0) -
+                                    new Date(ele.inTime)) /
+                                    (1000 * 60)
+                                ).toFixed() + " min late"
+                            : "Absent"}
+                        </td>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </tr>
+                );
+              })}  */}
+
+
+
+
+              {generateDaysInMonth().map((date, index) => {
+                const attendanceData = tableReport.find((ele) => {
+                  return new Date(ele.inTime).toLocaleDateString() === date;
+                });
+
+                const inTime = attendanceData?.inTime
+                  ? new Date(attendanceData.inTime).toLocaleTimeString()
+                  : "N/A";
+                const outTime = attendanceData?.outTime
+                  ? new Date(attendanceData.outTime).toLocaleTimeString()
+                  : "N/A";
+
+                return (
+                  <tr key={index}>
+                    <th>{index + 1}</th>
+                    <td>{date}</td>
+                    <td>{inTime}</td>
+                    <td>{outTime}</td>
+                    <td>{inTime === "N/A" ? "absent" : "Present"}</td>
+                    {role == 2 ? (
+                      <>
+                        <td>
+                          {attendanceData?.outTime && attendanceData?.inTime
+                            ? (
+                                (new Date(attendanceData.outTime) -
+                                  new Date(attendanceData.inTime)) /
+                                (1000 * 60 * 60)
+                              ).toFixed(2)
+                            : "N/A"}
+                        </td>
+                        <td
+                          style={{
+                            color:
+                              attendanceData?.inTime
+                                ? (new Date(attendanceData.inTime).setHours(9, 0, 0, 0) -
+                                    new Date(attendanceData.inTime)) /
+                                    (1000 * 60) >
+                                  0
+                                  ? "green"
+                                  : "red"
+                                : "inherit",
+                          }}
+                        >
+                          {attendanceData?.inTime
+                            ? (new Date(attendanceData.inTime).setHours(9, 0, 0, 0) -
+                                new Date(attendanceData.inTime)) /
+                                (1000 * 60) >
+                              0
+                              ? (
+                                  (new Date(attendanceData.inTime).setHours(9, 0, 0, 0) -
+                                    new Date(attendanceData.inTime)) /
+                                  (1000 * 60)
+                                ).toFixed() + " min early"
+                              : Math.abs(
+                                  (new Date(attendanceData.inTime).setHours(9, 0, 0, 0) -
+                                    new Date(attendanceData.inTime)) /
+                                    (1000 * 60)
+                                ).toFixed() + " min late"
+                            : "Absent"}
+                        </td>
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </tr>
                 );
               })}

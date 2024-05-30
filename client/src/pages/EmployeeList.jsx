@@ -97,6 +97,7 @@ const EmployeeList = ({ role, emailCookie }) => {
                       <th>Email</th>
                       <th>Role</th>
                       <th>Action</th>
+                      
                       {role == 3 ? (
                         <>
                           <th>Edit </th>
@@ -127,6 +128,7 @@ const EmployeeList = ({ role, emailCookie }) => {
                               ? "Admin"
                               : "null"}
                           </td>
+                          
                           <td>
                             <button
                               className="btn btn-secondary"

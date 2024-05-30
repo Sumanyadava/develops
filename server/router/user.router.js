@@ -16,7 +16,7 @@ router.get("/all", allUser);
 router.get("/single", singleUser);
 router.post("/login", login);
 router.post("/signin", signin);
-router.put("/signinedit", singleEdit);
+router.put("/singleedit", singleEdit);
 router.delete("/delete", deleteUser);
 
 export default router;
