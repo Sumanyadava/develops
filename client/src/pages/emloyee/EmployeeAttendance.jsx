@@ -11,6 +11,7 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
   const userEmail = searchParams.get("email") || emailCookie;
 
   const generateDaysInMonth = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
@@ -104,7 +105,7 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
     const inOutReport = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:3002/api/check/inouttime",
+          `${apiUrl}/api/check/inouttime`,
           {
             email: userEmail,
           }

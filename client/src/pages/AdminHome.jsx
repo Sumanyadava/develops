@@ -16,6 +16,7 @@ const AdminHome = ({ role }) => {
       ) : (
         <>
         <NotAuth />
+        {role} asdasdasd
         </>
       )}
     </div>

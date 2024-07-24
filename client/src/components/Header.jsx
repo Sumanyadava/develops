@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Theme from "./Theme";
 import NotAuth from "./NotAuth";
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
 
-const Header = ({ role, setRole, userNameCookie }) => {
+const Header = ({ role, setRole, userNameCookie , setJwtToken }) => {
   const navigateg = useNavigate();
+  const cookies = new Cookies();
 
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "cupcake"
@@ -77,9 +78,11 @@ const Header = ({ role, setRole, userNameCookie }) => {
                 <button
                   className="btn btn-accent mr-5"
                   onClick={() => {
-                    setRole("0");
+                    cookies.remove("jwt_auth", { path: '/' })
                     navigateg("/");
-                    Cookies.remove("userDATA");
+                    setRole(0);
+                    setJwtToken(null)
+                    
                   }}
                 >
                   Logout

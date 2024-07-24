@@ -1,24 +1,28 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Cookies from 'js-cookie'
 
-const Login = ({ role, setRole }) => {
+
+const Login = ({ role, setRole ,  setJwtToken, jwtToken}) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  
+  
+
+
   const [eye, setEye] = useState("password");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [userRoleLogin,setUSerRoleLogin] = useState(0)
-  
+  const [userRoleLogin, setUSerRoleLogin] = useState(0);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (Cookies.get('userDATA')) {
-      navigate('/dashboard')
+    if (jwtToken) {
+      navigate("/dashboard");
     }
-  })
+  });
 
   const handleshow = () => {
     if (eye === "password") {
@@ -47,23 +51,24 @@ const Login = ({ role, setRole }) => {
   const handleSubmitSign = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3002/api/auth/login", {
-        email: userEmail,
-        password: userPassword,
-        userRole:userRoleLogin
-      },{
-        withCredentials:true
-      })
+      .post(
+        `${apiUrl}/api/auth/login`,
+        {
+          email: userEmail,
+          password: userPassword,
+          userRole: userRoleLogin,
+        }
+      )
       .then((res) => {
         console.log(res);
+        const token = res.data.token;
+        setJwtToken(token);
         toast.success("Login Successfull");
         navigate("/dashboard");
       })
       .catch((err) => {
         toast.error(err.response.data.error);
       });
-
-      
   };
   return (
     <div className="flex h-full w-full text-black">
@@ -111,7 +116,9 @@ const Login = ({ role, setRole }) => {
           {/* --------form ends ---- */}
         </div>
         <div className="login_container bg-base-300  h-[400px] w-[350px] rounded-md p-2">
-          <h2 className="font-bold font-lobs text-3xl p-3 md:4xl">Welcome back !</h2>
+          <h2 className="font-bold font-lobs text-3xl p-3 md:4xl">
+            Welcome back !
+          </h2>
 
           <form
             action=""
@@ -166,11 +173,11 @@ const Login = ({ role, setRole }) => {
               className="btn border-black text-black hover:bg-gray-100 "
               onClick={() => {
                 setUserEmail("");
-                setUSerRoleLogin('null');
+                setUSerRoleLogin("null");
                 setUserPassword("");
               }}
             >
-              Reset
+              Reset 
             </button>
             {/* <p className="text-center text-gray-400">
               Forgot Password{" "}
@@ -181,7 +188,7 @@ const Login = ({ role, setRole }) => {
           </form>
         </div>
       </div>
-      <ToastContainer />
+      
     </div>
   );
 };

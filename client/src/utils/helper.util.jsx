@@ -2,9 +2,12 @@ import Cookies from 'js-cookie'
 import NotAuth from '../components/NotAuth'
 
 const authChecker = (ele) => {
-  if (!Cookies.get('userDATA')) {
+  const authToken = Cookies.get('jwt_auth');
+
+  if ( authToken == "null" ) {
     return (<NotAuth />) 
   }else{
+    console.log(authToken)
     return ele;
   }
 }

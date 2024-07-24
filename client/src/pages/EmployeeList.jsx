@@ -3,9 +3,10 @@ import Header from "../components/Header";
 import { useLocation, useNavigate } from "react-router-dom";
 import NotAuth from "../components/NotAuth";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const EmployeeList = ({ role, emailCookie }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [allTable, setAllTable] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [search, setSearch] = useState("");
@@ -14,7 +15,7 @@ const EmployeeList = ({ role, emailCookie }) => {
   useEffect(() => {
     const allUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3002/api/auth/all");
+        const res = await axios.get(`${apiUrl}/api/auth/all`);
         // filter the self user 
         const filteredData = res.data.filter((user) => user.email !== emailCookie);
         setAllTable(filteredData);
@@ -34,7 +35,7 @@ const EmployeeList = ({ role, emailCookie }) => {
   const handleDelete = async (email) => {
     console.log(email);
     try {
-      const res = await axios.delete("http://localhost:3002/api/auth/delete", {
+      const res = await axios.delete(`${apiUrl}/api/auth/delete`, {
         data:{email},
       });
       console.log(res.data);
@@ -169,7 +170,7 @@ const EmployeeList = ({ role, emailCookie }) => {
           </main>
         </>
       )}
-      <ToastContainer />
+      
     </div>
   );
 };

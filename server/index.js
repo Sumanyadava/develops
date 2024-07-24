@@ -8,22 +8,16 @@ import connectDB from "./config/db.js";
 import router from "./router/router.js";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-dotenv.config();
 
 const app = express();
-app.use(
-  cors({
-    origin: "https://developsclient.vercel.app/",
-    credentials:true,
-    
-  })
-);
-app.options('*', cors());
+app.use(cors())
+
+
+
 
 app.use(express.json());
+dotenv.config();
 
-app.use(bodyParser.json());
-app.use(cookieParser());
 
 connectDB();
 
@@ -31,7 +25,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to my API");
 });
 
-app.options('*', cors());
+
 
 app.use("/api", router);
 

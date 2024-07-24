@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
+
+
+
 const Signup = ({ role }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  
+
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -19,10 +25,9 @@ const Signup = ({ role }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-
     //filling the fields with user data
     axios
-      .get("http://localhost:3002/api/auth/single", {
+      .get(`${apiUrl}/api/auth/single`, {
         headers: {
           email: userEmailSearch,
         },
@@ -67,7 +72,8 @@ const Signup = ({ role }) => {
     ) {
       toast.error("Please fill all the fields");
     } else {
-      axios.post("http://localhost:3002/api/auth/signin", {
+      axios
+        .post(`${apiUrl}/api/auth/signin`, {
           name: userName,
           email: userEmail,
           password: userPassword,
@@ -88,7 +94,6 @@ const Signup = ({ role }) => {
           toast.error("user already exsist");
         });
 
-      
       console.log(userName, userEmail, userPassword, userRole);
     }
   };
@@ -97,28 +102,25 @@ const Signup = ({ role }) => {
     console.log("edit");
     try {
       axios
-      .put("http://localhost:3002/api/auth/singleedit", {
-        name: userName,
-        email: userEmail,
-        userRole: userRole,
-        workingHours: workingHour,
-        
-      })
-      .then((data) => {
-        
-        setUserName("");
-        setUserEmail("");
-        setUserPassword("");
-        setUserRole(1);
-        setWorkingHour("");
-        navigate(-1)
-        toast.success("edited successful");
-      })
-      .catch((err) => console.error(err));
+        .put(`${apiUrl}/api/auth/singleedit`, {
+          name: userName,
+          email: userEmail,
+          userRole: userRole,
+          workingHours: workingHour,
+        })
+        .then((data) => {
+          setUserName("");
+          setUserEmail("");
+          setUserPassword("");
+          setUserRole(1);
+          setWorkingHour("");
+          navigate(-1);
+          toast.success("edited successful");
+        })
+        .catch((err) => console.error(err));
     } catch (error) {
-      toast.error("error")
+      toast.error("error");
     }
-    
   };
 
   return (
@@ -210,7 +212,9 @@ const Signup = ({ role }) => {
 
                 <input
                   type={eye}
-                  placeholder={userEmailSearch ? "Reset Their password" :"Type here"}
+                  placeholder={
+                    userEmailSearch ? "Reset Their password" : "Type here"
+                  }
                   required
                   disabled={Boolean(userEmailSearch)}
                   className="peer input input-bordered w-full bg-white "
@@ -228,16 +232,9 @@ const Signup = ({ role }) => {
               <button className="btn mt-9" type="submit">
                 {userEmailSearch ? "edit user" : "Register user"}
               </button>
-              {userEmailSearch && (
-                <button
-                  className="btn mt-2"
-                  
-                >
-                  cancel
-                </button>
-              )}
+              {userEmailSearch && <button className="btn mt-2">cancel</button>}
 
-              <ToastContainer />
+              
 
               {/* <p className=" text-center mt-2">
                 Go Back?{" "}

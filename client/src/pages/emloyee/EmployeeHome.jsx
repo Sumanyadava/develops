@@ -2,10 +2,12 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const EmployeeHome = ({ emailCookie }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const [checkIn, setCheckIn] = useState(true);
@@ -32,9 +34,10 @@ const EmployeeHome = ({ emailCookie }) => {
   useEffect(() => {
     const CheckInOutTime = async () => {
       try {
-        const res = await axios.post("http://localhost:3002/api/check/time", {
+        const res = await axios.post(`${apiUrl}/api/check/time`, {
           email: emailCookie,
         });
+        console.log(res)
         const { inTime, outTime } = res.data.data;
         const lastCheckInDate = inTime ? new Date(inTime).getDate() : null;
         const lastCheckOutDate = outTime ? new Date(outTime).getDate() : null;
@@ -66,7 +69,7 @@ const EmployeeHome = ({ emailCookie }) => {
   const handleCheckIn = () => {
     // console.log(currentTime);
     axios
-      .post("http://localhost:3002/api/check/in", {
+      .post(`${apiUrl}/api/check/in`, {
         email: emailCookie,
         inTime: currentTime,
       })
@@ -86,7 +89,7 @@ const EmployeeHome = ({ emailCookie }) => {
 
   const handleCheckOut = () => {
     axios
-      .post("http://localhost:3002/api/check/out", {
+      .post(`${apiUrl}/api/check/out`, {
         email: emailCookie,
         outTime: currentTime,
       })
@@ -138,7 +141,7 @@ const EmployeeHome = ({ emailCookie }) => {
           </div>
         )}
       </div>
-      <ToastContainer />
+      
     </div>
   );
 };
