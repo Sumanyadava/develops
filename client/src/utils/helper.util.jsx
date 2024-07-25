@@ -7,7 +7,7 @@ const authChecker = (ele) => {
   if ( authToken == "null" ) {
     return (<NotAuth />) 
   }else{
-    console.log(authToken)
+    // console.log(authToken)
     return ele;
   }
 }

@@ -94,7 +94,7 @@ const Signup = ({ role }) => {
           toast.error("user already exsist");
         });
 
-      console.log(userName, userEmail, userPassword, userRole);
+      // console.log(userName, userEmail, userPassword, userRole);
     }
   };
   const handleEdit = (e) => {

@@ -37,7 +37,7 @@ const EmployeeHome = ({ emailCookie }) => {
         const res = await axios.post(`${apiUrl}/api/check/time`, {
           email: emailCookie,
         });
-        console.log(res)
+        // console.log(res)
         const { inTime, outTime } = res.data.data;
         const lastCheckInDate = inTime ? new Date(inTime).getDate() : null;
         const lastCheckOutDate = outTime ? new Date(outTime).getDate() : null;

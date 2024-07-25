@@ -33,12 +33,12 @@ const EmployeeList = ({ role, emailCookie }) => {
   };
 
   const handleDelete = async (email) => {
-    console.log(email);
+    // console.log(email);
     try {
       const res = await axios.delete(`${apiUrl}/api/auth/delete`, {
         data:{email},
       });
-      console.log(res.data);
+      // console.log(res.data);
       toast.success(res.data.message)
     } catch (error) {
       console.error("Error deleting user here :", error);

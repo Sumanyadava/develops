@@ -37,7 +37,7 @@ function App() {
       console.error("Invalid token:", error);
     }
   } else {
-    console.log(jwtToken);
+    // console.log(jwtToken);
   }
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function App() {
     } else {
       try {
         const { userRole,username,email } = decoded
-        console.log(userRole,username,email)
+        // console.log(userRole,username,email)
         setRole(userRole);
         setUserNameCookie(username)
         setEmailCookie(email)

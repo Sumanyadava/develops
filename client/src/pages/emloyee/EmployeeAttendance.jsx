@@ -7,11 +7,12 @@ const EmployeeAttendance = ({ role, userNameCookie, emailCookie }) => {
   const [tableReport, setTableReport] = useState([]);
   const [workingHoursReq, setWorkingHourReq] = useState();
   const [searchParams] = useSearchParams();
-
+  const apiUrl = import.meta.env.VITE_API_URL;
+  
   const userEmail = searchParams.get("email") || emailCookie;
 
   const generateDaysInMonth = () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
+
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();

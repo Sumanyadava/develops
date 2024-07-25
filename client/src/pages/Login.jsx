@@ -60,7 +60,7 @@ const Login = ({ role, setRole ,  setJwtToken, jwtToken}) => {
         }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const token = res.data.token;
         setJwtToken(token);
         toast.success("Login Successfull");
